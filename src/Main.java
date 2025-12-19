@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         int count = 0;
-        GymMember[] Member = new GymMember[1];
+        GymMember[] member = new GymMember[0];
         Loop:
         while (true) {
             System.out.println("------------------Welcome to deBugYourBody Gym!-----------------");
@@ -21,19 +21,28 @@ public class Main {
             String choose = sc.nextLine();
             switch (choose) {
                 case "1":
-                    int originalLength1 = Member.length;
-                    Member = addMember(Member);
-                    if (originalLength1 != Member.length)
+                    int originalLength1 = member.length;
+                    member = addMember(member);
+                    if (originalLength1 != member.length)
                         count++;
                     break;
                 case "2":
-                    int originalLength2 = Member.length;
-                    Member = deleteMember(Member);
-                    if (originalLength2 != Member.length)
+                    int originalLength2 = member.length;
+                    member = deleteMember(member);
+                    if (originalLength2 != member.length)
                         count--;
                     break;
+                case "3":
+                    updateMember(member);
+                    break;
+                case "4":
+                    queryMember(member);
+                    break;
+                case "5":
+                    listAll(member, count);
+                    break;
                 case "6":
-                    fuzzySearchByName(Member, count);
+                    fuzzySearchByName(member, count);
                     break;
                 case "7":
                     System.out.println("Log out");
@@ -84,6 +93,51 @@ public class Main {
         System.out.println("Member deleted successfully");
         return Member;
     }
+
+    //Update a member's details
+    public static void updateMember(GymMember[] Member) {
+        System.out.println("Please enter the ID to update:");
+        Scanner sc = new Scanner(System.in);
+        String id = sc.nextLine();
+        int index = findById(id, Member);
+        if (index == -1) {
+            System.out.println("Member not found");
+            return;
+        }
+        GymMember mem = Member[index];
+        System.out.println("Please enter the name to update:");
+        String newName = sc.nextLine();
+        mem.setName(newName);
+        System.out.println("Please enter the age to update:");
+        int newAge = Integer.parseInt(sc.nextLine());
+        mem.setAge(newAge);
+        System.out.println("Please enter the height to update:");
+        double newHeight = Double.parseDouble(sc.nextLine());
+        mem.setHeight(newHeight);
+        System.out.println("Please enter the weight to update:");
+        double newWeight = Double.parseDouble(sc.nextLine());
+        mem.setWeight(newWeight);
+    }
+
+
+    //Query member information
+    public static void queryMember(GymMember[] Member) {
+        System.out.println("Please enter the ID to query:");
+        Scanner sc = new Scanner(System.in);
+        String id = sc.nextLine();
+        int index = findById(id,Member);
+        if(index == -1){
+            System.out.println("Member not found");
+            return;
+        }
+        else{
+            GymMember mem = Member[index];
+            System.out.println("Member queried successfully");
+            System.out.println("id\tname\tage\theight\tweight");
+            System.out.println(mem.getId() + "\t" + mem.getName() + "\t\t" + mem.getAge() + "\t" + mem.getHeight() + "\t" + mem.getWeight());
+        }
+    }
+
     //List all members
     public static void listAll(GymMember[] Member, int count) {
         if (count != 0) {
@@ -125,6 +179,7 @@ public class Main {
         return newArr;
     }
 
+    //fuzzySearch
     public static void fuzzySearchByName(GymMember[] members, int count) {
         if (count == 0) {
             System.out.println("There are currently no members. Please add a member first!");
@@ -155,4 +210,5 @@ public class Main {
         }
     }
 }
+
 
