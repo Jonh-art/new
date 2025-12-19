@@ -20,6 +20,18 @@ public class Main {
             Scanner sc = new Scanner(System.in);
             String choose = sc.nextLine();
             switch (choose) {
+                case "1":
+                    int originalLength1 = Member.length;
+                    Member = addMember(Member);
+                    if (originalLength1 != Member.length)
+                        count++;
+                    break;
+                case "2":
+                    int originalLength2 = Member.length;
+                    Member = deleteMember(Member);
+                    if (originalLength2 != Member.length)
+                        count--;
+                    break;
                 case "6":
                     fuzzySearchByName(Member, count);
                     break;
@@ -31,6 +43,46 @@ public class Main {
             }
         }
 
+    }
+    //Add a member
+    public static GymMember[] addMember(GymMember[] Member) {
+        System.out.println("Please enter the ID:");
+        Scanner sc = new Scanner(System.in);
+        String id = sc.nextLine();
+        if (findById(id, Member) != -1) {
+            System.out.println("This ID is already in use. Cannot add.");
+            return Member;
+        }
+        System.out.println("Please enter the name");
+        String name = sc.nextLine();
+        System.out.println("Please enter the age");
+        int age = Integer.parseInt(sc.nextLine());
+        System.out.println("Please enter the height");
+        double height = Double.parseDouble(sc.nextLine());
+        System.out.println("Please enter the weight");
+        double weight = Double.parseDouble(sc.nextLine());
+        Member = expandArr(Member);
+        Member[Member.length - 1] = new GymMember(id, name, age, height, weight);
+        System.out.println("Member added successfully");
+        return Member;
+    }
+
+    //Delete a member
+    public static GymMember[] deleteMember(GymMember[] Member) {
+        System.out.println("Please enter the ID to delete:");
+        Scanner sc = new Scanner(System.in);
+        String id = sc.nextLine();
+        int index = findById(id, Member);
+        if (index == -1) {
+            System.out.println("Member not found");
+            return Member;
+        }
+        for (int i = index; i < Member.length-1; i++) {
+            Member[i] = Member[i + 1];
+        }
+        Member = shortenArr(Member);
+        System.out.println("Member deleted successfully");
+        return Member;
     }
     //List all members
     public static void listAll(GymMember[] Member, int count) {
